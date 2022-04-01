@@ -3,8 +3,8 @@
     "description": "This program is a school management system",
     "autoload": {
         "psr-4": {
-            "Konye\\Sysco\\": "src/",
-            "Konye\\Framework\\": "framework/"
+            "App\\": "app/",
+            "Framework\\": "framework/"
         }
     },
     "authors": [
