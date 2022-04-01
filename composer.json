@@ -4,7 +4,7 @@
     "autoload": {
         "psr-4": {
             "Konye\\Sysco\\": "src/",
-            "Konye\\Sysco\\": "framework/"
+            "Konye\\Framework\\": "framework/"
         }
     },
     "authors": [
