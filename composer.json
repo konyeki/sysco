@@ -1,0 +1,20 @@
+{
+    "name": "konye/sysco",
+    "description": "This program is a school management system",
+    "autoload": {
+        "psr-4": {
+            "Konye\\Sysco\\": "src/",
+            "Konye\\Sysco\\": "framework/"
+        }
+    },
+    "authors": [
+        {
+            "name": "konyeki",
+            "email": "konye.evans@yahoo.com"
+        }
+    ],
+    "require": {},
+    "config": {
+        "process-timeout": 0
+    }
+}
