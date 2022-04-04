@@ -41,7 +41,7 @@ class Router
                 // page that we will define in the routes file
                 return $matching->dispatch();
 
-            }catch(\Throwable $e){//Here the Throwable exist in the Global Namespace and we need to preceed it
+            }catch(\Throwable $e){//Here the Throwable exist in the Global Namespace and we need to precede it
                 //with a back slash
                 return $this->dispatchError();
             }
@@ -71,7 +71,7 @@ class Router
 
     private function match(string $method, string $path): ?Route
     {
-        //We are accessing the Route class without going through injection
+        //We are accessing the Route class without going through tight coupling
         foreach($this->routes as $route){
             if($route->matches($method, $path)){//Let us create the matches method in the Route class
                 return $route;
@@ -110,8 +110,6 @@ class Router
         );
         exit;
     }
-
-
 
 }
 

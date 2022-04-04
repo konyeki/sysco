@@ -6,13 +6,13 @@ return function (Router $router){
     //If someone types the domain name in url the person will be welcomed with hello world
     $router->add(
         'GET', '/',
-        fn() =>"Hello world"
+        fn() =>"Hello world welcome to our beautiful website"
     );
 
-    //What if someone access the old page w
+    //What if someone access the old page
     //We want him to be redirected to the new page
     $router->add(
-        'GET', '/old-home',
+        'GET', '/old-home',//such named parameter will come when we are  creating the controller
         fn() => $router->redirect('/')//We are yet to implement the redirect method in our router class
     );
 
