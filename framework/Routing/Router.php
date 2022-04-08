@@ -8,6 +8,7 @@ class Router
 {
     protected array $routes = [];
     protected array $errorHandler = [];
+    protected Route $current;
 
     public function add(
         string $method,
@@ -82,25 +83,25 @@ class Router
 
     public function errorHandler(int $code, callable $handler)
     {
-        $this->errorHandler[$code] = $handler;
+        $this->errorHandlers[$code] = $handler;
     }
 
     public function dispatchNotAllowed()
     {
-        $this->errorHandler[400] ??= fn() => "not allowed";
-        return $this->errorHandler[400]();
+        $this->errorHandlers[400] ??= fn() => "not allowed";
+        return $this->errorHandlers[400]();
     }
 
     public function dispatchNotFound()
     {
-        $this->errorHandler[404] ??= fn() => "not found";
-        return $this->errorHandler[404]();
+        $this->errorHandlers[404] ??= fn() => "not found";
+        return $this->errorHandlers[404]();
     }
 
     public function dispatchError()
     {
-        $this->errorHandler[500] ??= fn() => "server error";
-        return $this->errorHandler[500]();
+        $this->errorHandlers[500] ??= fn() => "server error";
+        return $this->errorHandlers[500]();
     }
 
     public function redirect($path)
@@ -109,6 +110,45 @@ class Router
             "Location: {$path}", $replace = true, $code = 301
         );
         exit;
+    }
+
+    //Current method
+
+    /**
+     * @return Route
+     */
+    public function current(): Route
+    {
+        return $this->current;
+    }
+
+    public function route(
+        string $name,
+        array $parameters = [],
+    ):string
+    {
+        foreach($this->routes as $route){
+            if($route->name() === $name){
+                $finds = [];
+                $replaces = [];
+                foreach( $parameters as $key => $value){
+                    // one set for required parameters
+                    array_push($finds, "{{$key}}");
+                    array_push($replaces, $value);
+                    // ...and another for optional parameters
+                    array_push($finds, "{{$key}?}");
+                    array_push($replaces, $value);
+                }
+                $path = $route->path();
+                $path = str_replace($finds, $replaces, $path);
+                // remove any optional parameters not provided
+                $path = preg_replace('#{[^}]+}#', '', $path);
+                // we should think about warning if a required
+                // parameter hasn't been provided...
+                return $path;
+            }
+        }
+        throw new Exception('no route with that name');
     }
 
 }

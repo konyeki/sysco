@@ -29,4 +29,37 @@ return function (Router $router){
     );
     //This routes file is where we create our request it could be POST, DELETE and other methods
 
+    //Let us implement the named parameter in our project's url
+    //it follows the controller/action/parameter one which must be provided and one which is optional
+    $router->add(
+        'GET', 'product/view/{product}',
+        function () use ($router){//using the the function current() in a Router class
+            $parameters = $router->current()->parameters();
+            return "Product is {$parameters['product']}";
+        },
+    );
+
+    //option parameter
+    $router->add(
+        'GET', '/service/view/{service?}',
+        function () use ($router){
+            $parameters = $router->current()->parameters();
+            //Let us do some logical operation here to allow all services to be displayed in case
+            //it has not been provided and return what has been provide if there is an input
+            if(empty($parameters['service'])){
+                return 'all services';
+            }
+            return "Service is {parameter['service']}";
+        },
+    );
+
+    $router->add(
+        'GET', '/products/{page?}',
+        function () use ($router) {
+            $parameters = $router->current()->parameters();
+            $parameters['page'] ??= 1;
+            return "products for page {$parameters['page']}";
+        },
+    )->name('product-list');
 };
+
